@@ -3,11 +3,15 @@
   "name": "ChromeOS CustomBack",
   "version": "1.0",
   "description": "Custom background for ChromeOS built-in pages/apps.",
-  "homepage_url": "https://github.com/supechicken/ChromeOS-AutoStart",
+  "homepage_url": "https://github.com/supechicken/ChromeOS-CustomBack",
   "author": "supechicken666@gmail.com",
   "icons": {
     "192": "img/icon-192.png",
     "512": "img/icon-512.png"
+  },
+  "background": {
+    "service_worker": "service_worker.js",
+    "type": "module"
   },
   "content_scripts": [
     {

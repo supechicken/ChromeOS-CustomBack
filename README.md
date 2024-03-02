@@ -4,6 +4,10 @@
   <p>Custom background for ChromeOS built-in pages/apps</p>
 </div>
 
+## Screenshots
+<img width="500px" src="/img/screenshots/files-app.png" />
+<img width="500px" src="/img/screenshots/extensions-tab.png" />
+
 ## Installation
 > [!NOTE]
 > The `Extensions on chrome:// URLs` flag needs to be enabled first, otherwise this extension will not work.
@@ -16,10 +20,10 @@
   - Drag the folder within the zip file into the Downloads folder
   - Optionally delete the zip file
 - Go to [chrome://extensions](chrome://extensions) and enable Developer Mode
-- Click "Pack Extension", click "Browse" under "Extension Root Directory", then click on the folder named `ChromeOS-AutoStart-main`, and click "Open"
-- Click "Pack Extension", then click "Okay"
-- Open the file manager, go to Downloads and drag the `.crx` file into the chrome://extensions window.
-- Click "Add Extension"
+- Click <kbd>Pack Extension</kbd>, click <kbd>Browse</kbd> under <kbd>Extension Root Directory</kbd>, then click on the folder named `ChromeOS-CustomBack-<version>`, and click <kbd>Open</kbd>
+- Click <kbd>Pack Extension</kbd>, then click <kbd>Okay</kbd>
+- Open the file manager, go to Downloads and drag the `.crx` file into the `chrome://extensions` window.
+- Click <kbd>Add Extension</kbd>
 - Optionally delete the generated `.crx` packaged file and `.pem` key file
 
 ## License
