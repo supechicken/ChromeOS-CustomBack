@@ -14,20 +14,22 @@
   }
 }
 
-#file-context-menu, #gear-menu, #tasks-menu, #providers-menu, #text-context-menu {
-  background-color: rgb(var(--txt-cros-sys-app_base));
+#sort-menu, #file-context-menu, #gear-menu, #tasks-menu, #providers-menu, #text-context-menu {
+  backdrop-filter: blur(var(--blur-radius));
 }
 
 .backgroundImg {
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
-  width: 100%;
   z-index: -999;
   object-position: center;
   object-fit: cover;
   filter: blur(var(--blur-radius));
+  pointer-events: none;
+  user-select: none;
+  height: 100%;
+  width: 100%;
 }
 
 os-settings-ui {
