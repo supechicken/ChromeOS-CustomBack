@@ -1,0 +1,35 @@
+:root {
+  --blur-radius: 5px;
+  --element-opacity: 60%;
+  --txt-cros-sys-app_base: 254, 251, 255;
+  --new-cros-sys-app_base: rgba(var(--txt-cros-sys-app_base), calc(var(--element-opacity) + 10%));
+  --new-cros-sys-app_base_shaded: rgba(240, 240, 250, var(--element-opacity));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --txt-cros-sys-app_base: 22, 23, 29;
+    --new-cros-sys-app_base: rgba(var(--txt-cros-sys-app_base), var(--element-opacity));
+    --new-cros-sys-app_base_shaded: rgba(0, 0, 0, var(--element-opacity));
+  }
+}
+
+#file-context-menu {
+  background-color: rgb(var(--txt-cros-sys-app_base));
+}
+
+.backgroundImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -999;
+  object-position: center;
+  object-fit: cover;
+  filter: blur(var(--blur-radius));
+}
+
+os-settings-ui {
+  background-color: var(--new-cros-sys-app_base_shaded);
+}
