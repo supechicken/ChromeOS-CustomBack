@@ -5,8 +5,8 @@
 </div>
 
 ## Screenshots
-<img width="500px" src="/img/screenshots/files-app.png" />
-<img width="500px" src="/img/screenshots/extensions-tab.png" />
+<img width="400px" src="/img/screenshots/files-app.png" />
+<img width="400px" src="/img/screenshots/extensions-tab.png" />
 
 ## Installation
 > [!NOTE]
