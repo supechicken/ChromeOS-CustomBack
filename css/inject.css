@@ -14,7 +14,7 @@
   }
 }
 
-#file-context-menu {
+#file-context-menu, #gear-menu, #tasks-menu, #providers-menu, #text-context-menu {
   background-color: rgb(var(--txt-cros-sys-app_base));
 }
 
