@@ -6,6 +6,7 @@
   "homepage_url": "https://github.com/supechicken/ChromeOS-CustomBack",
   "author": "supechicken666@gmail.com",
   "icons": {
+    "128": "img/icon-128.png",
     "192": "img/icon-192.png",
     "512": "img/icon-512.png"
   },
