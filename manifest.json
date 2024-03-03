@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ChromeOS CustomBack",
-  "version": "1.0.1",
+  "version": "1.1",
   "description": "Custom background for ChromeOS built-in pages/apps.",
   "homepage_url": "https://github.com/supechicken/ChromeOS-CustomBack",
   "author": "supechicken666@gmail.com",
@@ -13,46 +13,23 @@
     "service_worker": "service_worker.js",
     "type": "module"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "chrome://bookmarks/*",
-        "chrome://diagnostics/*",
-        "chrome://downloads/*",
-        "chrome://extensions/*",
-        "chrome://file-manager/*",
-        "chrome://flags/*",
-        "chrome://history/*",
-        "chrome://os-settings/*",
-        "chrome://password-manager/*",
-        "chrome://settings/*"
-      ],
-      "css": ["css/inject.css"],
-      "js": ["js/inject.js"]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": [ "js/shared/functions.js" ],
-      "matches": [
-        "chrome://bookmarks/*",
-        "chrome://diagnostics/*",
-        "chrome://downloads/*",
-        "chrome://extensions/*",
-        "chrome://file-manager/*",
-        "chrome://flags/*",
-        "chrome://history/*",
-        "chrome://os-settings/*",
-        "chrome://password-manager/*",
-        "chrome://settings/*"
-      ]
-    }
-  ],
   "offline_enabled": true,
   "options_page": "html/settings.html",
   "options_ui": {
     "page": "html/settings.html",
     "open_in_tab": true
   },
-  "permissions": [ "storage" ]
+  "permissions": [ "scripting", "storage" ],
+  "optional_host_permissions": [
+    "chrome://bookmarks/*",
+    "chrome://diagnostics/*",
+    "chrome://downloads/*",
+    "chrome://extensions/*",
+    "chrome://file-manager/*",
+    "chrome://flags/*",
+    "chrome://history/*",
+    "chrome://os-settings/*",
+    "chrome://password-manager/*",
+    "chrome://settings/*"
+  ]
 }

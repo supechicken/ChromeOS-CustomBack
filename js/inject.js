@@ -1,14 +1,22 @@
 const rootStyle     = document.documentElement.style,
       backgroundImg = document.createElement("img");
 
+function printLog(message) {
+  // printLog(): print to browser console
+  if (message instanceof Array) {
+    message.forEach(m => console.log('[ChromeOS CustomBack]:', m));
+  } else {
+    console.log('[ChromeOS CustomBack]:', message);
+  }
+}
+
 function hex2rgba(hex, alpha = 1) {
   const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
   return `rgba(${r},${g},${b},${alpha})`;
 };
 
 window.addEventListener('load', async () => {
-  const printLog     = await import(chrome.runtime.getURL('js/shared/functions.js')).then(m => m.printLog),
-        localStorage = await new Promise(r => chrome.storage.local.get(['backgroundURL', 'blurRadius', 'UIOpacity', 'chromeUI'], c => r(c)));
+  const localStorage = await chrome.storage.local.get(['backgroundURL', 'blurRadius', 'UIOpacity', 'chromeUI']);
 
   switch (location.hostname) {
     case 'os-settings':

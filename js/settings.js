@@ -1,6 +1,5 @@
-import { printLog } from "./shared/functions.js";
-
-const rootStyle         = document.documentElement.style,
+const chromeURLs        = chrome.runtime.getManifest().optional_host_permissions,
+      rootStyle         = document.documentElement.style,
       currentImg        = document.getElementById('currentImg'),
       blurRadiusSlider  = document.getElementById('blurRadiusSlider'),
       blurRadiusPercent = document.getElementById('blurRadiusPercent'),
@@ -9,6 +8,15 @@ const rootStyle         = document.documentElement.style,
       chromeUI          = document.getElementById('chromeUI'),
       backgroundPicker  = document.getElementById('backgroundPicker'),
       saveBtn           = document.getElementById('saveBtn');
+
+function printLog(message) {
+  // printLog(): print to browser console
+  if (message instanceof Array) {
+    message.forEach(m => console.log('[ChromeOS CustomBack]:', m));
+  } else {
+    console.log('[ChromeOS CustomBack]:', message);
+  }
+}
 
 function getDataURL(file) {
   const reader = new FileReader();
@@ -37,21 +45,54 @@ backgroundPicker.onchange = async () => {
 };
 
 saveBtn.onclick = async () => {
-  const backgroundFile = backgroundPicker.files[0];
+  const registration   = await chrome.scripting.getRegisteredContentScripts({ids: ["injection-script"]}).then(s => s[0]),
+        backgroundFile = backgroundPicker.files[0];
+
+  await chrome.permissions.request({ origins: chromeURLs }).then(() => {
+    printLog('Permission acquired!');
+  }).catch(e => {
+    console.error(e);
+    alert('Failed to acquire permission for chrome:// URLs.\n\nDoes the "Extensions on chrome:// URLs" flag enabled?');
+    throw new Error('Failed to acquire permission for chrome:// URLs.')
+  });
+
+  if (registration) {
+    printLog([ 'Registration:', registration ]);
+  } else {
+    await chrome.scripting.registerContentScripts([{
+      allFrames: true,
+      persistAcrossSessions: false,
+      id:  'injection-script',
+      js:  ['js/inject.js'],
+      css: ['css/inject.css'],
+      matches: chromeURLs,
+      runAt: 'document_end'
+    }]).then(() => {
+      printLog('Injection script registered!');
+    }).catch(e => {
+      console.error(e);
+      alert('Failed to register injection script.\n\nDoes the "Extensions on chrome:// URLs" flag enabled?');
+      throw new Error('Failed to register injection script.');
+    });
+  }
 
   if (backgroundFile) {
     const dataURL = await getDataURL(backgroundFile);
-    chrome.storage.local.set({ backgroundURL: dataURL }, () => printLog('Background saved.'));
+    await chrome.storage.local.set({ backgroundURL: dataURL }).then(() => printLog('Background saved.'));
   }
 
-  chrome.storage.local.set({ blurRadius: blurRadiusSlider.value, UIOpacity: UIOpacitySlider.value, chromeUI: chromeUI.checked }, () => {
+  await chrome.storage.local.set({
+    blurRadius: blurRadiusSlider.value,
+    UIOpacity: UIOpacitySlider.value,
+    chromeUI: chromeUI.checked
+  }).then(() => {
     printLog('Options saved.');
     alert("Changes saved.");
   });
 };
 
 window.onload = async () => {
-  const localStorage = await new Promise(r => chrome.storage.local.get(['backgroundURL', 'blurRadius', 'UIOpacity', 'chromeUI'], c => r(c)));
+  const localStorage = await chrome.storage.local.get(['backgroundURL', 'blurRadius', 'UIOpacity', 'chromeUI']);
 
   rootStyle.setProperty('--blur-radius', `${localStorage.blurRadius || 5}px`);
   rootStyle.setProperty('--element-opacity', `${localStorage.UIOpacity || 50}%`);
