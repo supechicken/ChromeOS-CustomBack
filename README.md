@@ -8,7 +8,7 @@
 ## Screenshots
 <img width="350" src="/img/screenshots/files-app.png" /><img width="350" src="/img/screenshots/extensions-tab.png" />
 
-## Installation
+## Install from this repository
 > [!NOTE]
 > The `Extensions on chrome:// URLs` flag needs to be enabled first, otherwise this extension will not work.
 >
