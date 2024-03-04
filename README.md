@@ -2,6 +2,7 @@
   <img src="/img/icon.svg" alt="logo" width="180" height="180" />
   <h1>ChromeOS CustomBack</h1>
   <p>Custom background for ChromeOS built-in pages/apps</p>
+  <a href="https://chromewebstore.google.com/detail/chromeos-customback/iimcjilfepcbjocljimkkcdmchpeoipc"><img src="/img/chrome-webstore-logo.png" alt="webstore_logo" height="70" /></a>
 </div>
 
 ## Screenshots
