@@ -1,3 +1,5 @@
+const chromeURLs = chrome.runtime.getManifest().optional_host_permissions;
+
 chrome.runtime.onInstalled.addListener(async i => {
   switch (i.reason) {
     case 'install':
