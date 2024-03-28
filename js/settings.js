@@ -1,5 +1,6 @@
 const chromeURLs        = chrome.runtime.getManifest().optional_host_permissions,
       rootStyle         = document.documentElement.style,
+      currentVideo      = document.getElementById('currentVideo'),
       currentImg        = document.getElementById('currentImg'),
       blurRadiusSlider  = document.getElementById('blurRadiusSlider'),
       blurRadiusPercent = document.getElementById('blurRadiusPercent'),
@@ -41,7 +42,13 @@ UIOpacitySlider.oninput = UIOpacitySlider.onchange = () => {
 backgroundPicker.onchange = async () => {
   const backgroundFile = backgroundPicker.files[0];
 
-  currentImg.src = URL.createObjectURL(backgroundFile);
+  if (backgroundFile.type.startsWith('video/')) {
+    currentVideo.src = URL.createObjectURL(backgroundFile);
+    currentVideo.style.display = 'initial';
+  } else {
+    currentImg.src = URL.createObjectURL(backgroundFile);
+    currentImg.style.display = 'initial';
+  }
 };
 
 saveBtn.onclick = async () => {
@@ -78,7 +85,10 @@ saveBtn.onclick = async () => {
 
   if (backgroundFile) {
     const dataURL = await getDataURL(backgroundFile);
-    await chrome.storage.local.set({ backgroundURL: dataURL }).then(() => printLog('Background saved.'));
+    await chrome.storage.local.set({
+      backgroundURL:  dataURL,
+      backgroundType: backgroundFile.type
+    }).then(() => printLog('Background saved.'));
   }
 
   await chrome.storage.local.set({
@@ -92,12 +102,20 @@ saveBtn.onclick = async () => {
 };
 
 window.onload = async () => {
-  const localStorage = await chrome.storage.local.get(['backgroundURL', 'blurRadius', 'UIOpacity', 'chromeUI']);
+  const localStorage = await chrome.storage.local.get(['backgroundURL', 'backgroundType', 'blurRadius', 'UIOpacity', 'chromeUI']);
 
   rootStyle.setProperty('--blur-radius', `${localStorage.blurRadius || 5}px`);
   rootStyle.setProperty('--element-opacity', `${localStorage.UIOpacity || 50}%`);
 
-  if (localStorage.backgroundURL) currentImg.src = localStorage.backgroundURL;
+  if (localStorage.backgroundURL) {
+    if (localStorage.backgroundType.startsWith('video/')) {
+      currentVideo.style.display = 'initial';
+      currentVideo.src           = localStorage.backgroundURL;
+    } else {
+      currentImg.style.display = 'initial';
+      currentImg.src           = localStorage.backgroundURL;
+    }
+  }
 
   chromeUI.checked            = localStorage.chromeUI;
   blurRadiusSlider.value      = localStorage.blurRadius || 5;

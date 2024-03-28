@@ -20,7 +20,7 @@
     "page": "html/settings.html",
     "open_in_tab": true
   },
-  "permissions": [ "scripting", "storage" ],
+  "permissions": [ "scripting", "storage", "unlimitedStorage" ],
   "optional_host_permissions": [
     "chrome://bookmarks/*",
     "chrome://diagnostics/*",

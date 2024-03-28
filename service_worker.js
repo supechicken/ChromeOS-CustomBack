@@ -10,11 +10,11 @@ chrome.runtime.onInstalled.addListener(async i => {
 
 // register injection script on startup
 chrome.runtime.onStartup.addListener(async () => {
-  const localStorage = await chrome.storage.local.get(['backgroundURL', 'blurRadius', 'UIOpacity', 'chromeUI']);
+  const localStorage = await chrome.storage.local.get(['backgroundURL']);
 
   if (!localStorage.backgroundURL) return;
 
-  chrome.scripting.registerContentScripts([{
+  await chrome.scripting.registerContentScripts([{
     allFrames: true,
     persistAcrossSessions: false,
     id:  'injection-script',

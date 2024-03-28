@@ -18,7 +18,7 @@
   backdrop-filter: blur(var(--blur-radius));
 }
 
-.backgroundImg {
+.customBackground {
   position: absolute;
   top: 0;
   left: 0;

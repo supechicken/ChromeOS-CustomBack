@@ -51,7 +51,8 @@
       width: 100%;
     }
 
-    #currentImg {
+    .currentBackground {
+      display: none;
       object-position: center;
       object-fit: cover;
       filter: blur(var(--blur-radius));
@@ -68,7 +69,8 @@
     <legend>Preview</legend>
     <div id="preview">
       <div id="currentImg_container">
-        <img id="currentImg" />
+        <img class="currentBackground" id="currentImg" />
+        <video class="currentBackground" id="currentVideo" autoplay loop muted></video>
       </div>
       <div id="previewUI">
         <p>Example UI</p>
@@ -77,7 +79,7 @@
   </fieldset>
   <fieldset>
     <legend>Pick a new background</legend>
-    <input id="backgroundPicker" type="file" />
+    <input id="backgroundPicker" type="file" accept="image/*,video/*" />
   </fieldset>
   <fieldset>
     <legend>Options</legend>

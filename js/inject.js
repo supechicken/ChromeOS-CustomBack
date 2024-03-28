@@ -1,5 +1,6 @@
-const rootStyle     = document.documentElement.style,
-      backgroundImg = document.createElement("img");
+const rootStyle       = document.documentElement.style,
+      backgroundImg   = document.createElement("img"),
+      backgroundVideo = document.createElement('video');
 
 function printLog(message) {
   // printLog(): print to browser console
@@ -11,7 +12,7 @@ function printLog(message) {
 }
 
 window.addEventListener('load', async () => {
-  const localStorage = await chrome.storage.local.get(['backgroundURL', 'blurRadius', 'UIOpacity', 'chromeUI']);
+  const localStorage = await chrome.storage.local.get(['backgroundURL', 'backgroundType', 'blurRadius', 'UIOpacity', 'chromeUI']);
 
   switch (location.hostname) {
     case 'os-settings':
@@ -37,8 +38,19 @@ window.addEventListener('load', async () => {
 
   printLog('Style injected!');
 
-  backgroundImg.src       = localStorage.backgroundURL;
-  backgroundImg.className = "backgroundImg";
+  if (localStorage.backgroundType.startsWith('video/')) {
+    backgroundVideo.autoplay = backgroundVideo.loop = backgroundVideo.muted = true;
 
-  document.body.appendChild(backgroundImg);
+    backgroundVideo.src           = localStorage.backgroundURL;
+    backgroundVideo.className     = "customBackground";
+    backgroundVideo.style.display = 'initial';
+
+    document.body.appendChild(backgroundVideo);
+  } else {
+    backgroundImg.src             = localStorage.backgroundURL;
+    backgroundImg.className       = "customBackground";
+    backgroundVideo.style.display = 'initial';
+
+    document.body.appendChild(backgroundImg);
+  }
 });
