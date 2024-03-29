@@ -1,20 +1,7 @@
 const chromeURLs = chrome.runtime.getManifest().optional_host_permissions;
 
-chrome.runtime.onInstalled.addListener(async i => {
-  switch (i.reason) {
-    case 'install':
-      chrome.windows.create({ url: '/html/settings.html', type: 'popup' });
-      break;
-  }
-});
-
-// register injection script on startup
-chrome.runtime.onStartup.addListener(async () => {
-  const localStorage = await chrome.storage.local.get(['backgroundURL']);
-
-  if (!localStorage.backgroundURL) return;
-
-  await chrome.scripting.registerContentScripts([{
+function registerInjectionScript() {
+  return chrome.scripting.registerContentScripts([{
     allFrames: true,
     persistAcrossSessions: false,
     id:  'injection-script',
@@ -29,4 +16,24 @@ chrome.runtime.onStartup.addListener(async () => {
     console.error('Failed to register injection script.\n\nDoes the "Extensions on chrome:// URLs" flag enabled?');
     throw new Error('Failed to register injection script.');
   });
+}
+
+chrome.runtime.onInstalled.addListener(async i => {
+  switch (i.reason) {
+    case 'install':
+      chrome.windows.create({ url: '/html/settings.html', type: 'popup' });
+      break;
+    default:
+      await registerInjectionScript();
+      break;
+  }
+});
+
+// register injection script on startup
+chrome.runtime.onStartup.addListener(async () => {
+  const localStorage = await chrome.storage.local.get(['backgroundURL']);
+
+  if (!localStorage.backgroundURL) return;
+
+  await registerInjectionScript();
 });

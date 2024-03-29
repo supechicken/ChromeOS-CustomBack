@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ChromeOS CustomBack",
-  "version": "1.1",
+  "version": "2.0",
   "description": "Custom background for ChromeOS built-in pages/apps.",
   "homepage_url": "https://github.com/supechicken/ChromeOS-CustomBack",
   "author": "supechicken666@gmail.com",
