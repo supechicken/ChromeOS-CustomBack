@@ -10,58 +10,6 @@
   <link rel="stylesheet" href="/css/inject.css" />
 
   <script src="/js/settings.js" type="module" defer></script>
-  <style>
-    input[type="file"] { width: 100%; }
-    input[type="range"] { width: calc(100% - 150px); }
-    body { width: 800px; }
-    fieldset { width: 70%; }
-
-    #preview {
-      position: relative;
-      border-radius: 10px;
-      height: 40vh;
-      width: 100%;
-    }
-
-    #preview > * { border-radius: 10px; }
-
-    #previewUI {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      background-color: var(--new-cros-sys-app_base_shaded);
-      height: 100%;
-      width: 100%;
-      z-index: 1;
-    }
-
-    #previewUI > * {
-      background-color: var(--new-cros-sys-app_base);
-      border-radius: 10px;
-      padding: 40px;
-    }
-
-    #currentImg_container {
-      position: absolute;
-      overflow: hidden;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-    }
-
-    .currentBackground {
-      display: none;
-      object-position: center;
-      object-fit: cover;
-      filter: blur(var(--blur-radius));
-      pointer-events: none;
-      user-select: none;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
 </head>
 
 <body>
@@ -73,7 +21,16 @@
         <video class="currentBackground" id="currentVideo" autoplay loop muted></video>
       </div>
       <div id="previewUI">
-        <p>Example UI</p>
+        <p>Recent</p>
+        <p>My Files</p>
+        <p>Downloads</p>
+        <div id="previewSubUI">
+          <p>My Files</p>
+          <p style="position: absolute; top: -6px; right: 25px;">⋮</p>
+          <div id="previewMenu">
+            <p>I am menu</p>
+          </div>
+        </div>
       </div>
     </div>
   </fieldset>
@@ -90,16 +47,45 @@
       </label>
       <label for="chromeUI">Enable on Chrome UI (e.g. bookmark page)</label>
     </div>
-    <div class="horizontal-center" style="position: relative;">
-      <label for="blurRadiusSlider">Blur radius: </label>
-      <input id="blurRadiusSlider" type="range" min="0" max="20" value="5">
-      <label id="blurRadiusPercent" for="blurRadiusSlider" style="position: absolute; right: 0;"></label>
+
+    <div class="horizontal-center">
+      <label class="switch">
+        <input type="checkbox" id="materialYou">
+        <span class="slider round"></span>
+      </label>
+      <label for="materialYou">Keep current Material You color theme</label>
     </div>
-    <div class="horizontal-center" style="position: relative;">
-      <label for="UIOpacitySlider">UI Opacity: </label>
-      <input id="UIOpacitySlider" type="range" min="0" max="100" value="50">
-      <label id="UIOpacityPercent" for="UIOpacitySlider" style="position: absolute; right: 0;"></label>
-    </div>
+
+    <table>
+      <tr>
+        <td class="description">UI blur radius: </td>
+        <td class="slider-td">
+          <input style="width: calc(100% - 30px);" id="blurRadiusSlider" type="range" min="0" max="20" value="5">
+          <label id="blurRadiusPercent" for="blurRadiusSlider"></label>
+        </td>
+      </tr>
+      <tr>
+        <td class="description">Menu blur radius: </td>
+        <td class="slider-td">
+          <input id="menuBlurRadiusSlider" type="range" min="0" max="20" value="5">
+          <label id="menuBlurRadiusPercent" for="menuBlurRadiusSlider"></label>
+        </td>
+      </tr>
+      <tr>
+        <td class="description">UI opacity: </td>
+        <td class="slider-td">
+          <input id="UIOpacitySlider" type="range" min="0" max="100" value="50">
+          <label id="UIOpacityPercent" for="UIOpacitySlider"></label>
+        </td>
+      </tr>
+      <tr>
+        <td class="description">Menu opacity: </td>
+        <td class="slider-td">
+          <input id="menuOpacitySlider" type="range" min="0" max="100" value="50">
+          <label id="menuOpacityPercent" for="menuOpacitySlider"></label>
+        </td>
+      </tr>
+    </table>
   </fieldset>
   <button id="saveBtn">Save settings</button>
 </body>

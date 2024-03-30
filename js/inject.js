@@ -11,8 +11,22 @@ function printLog(message) {
   }
 }
 
+function hex2rgba(str) {
+  return str.match(/^\#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/).
+         slice(1, -1).map(hex => parseInt(hex, 16)).join(', ');
+}
+
 window.addEventListener('load', async () => {
-  const localStorage = await chrome.storage.local.get(['backgroundURL', 'backgroundType', 'blurRadius', 'UIOpacity', 'chromeUI']);
+  const localStorage = await chrome.storage.local.get([
+    'backgroundURL',
+    'backgroundType',
+    'blurRadius',
+    'menuBlurRadius',
+    'UIOpacity',
+    'menuOpacity',
+    'chromeUI',
+    'materialYou'
+  ]);
 
   switch (location.hostname) {
     case 'os-settings':
@@ -29,8 +43,20 @@ window.addEventListener('load', async () => {
       break;
   }
 
+  const orig_app_base_color          = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base'),
+        orig_app_base_shaded_color   = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base_shaded'),
+        txt_cros_sys_app_base        = hex2rgba(orig_app_base_color),
+        txt_cros_sys_app_base_shaded = hex2rgba(orig_app_base_shaded_color);
+
+  if (localStorage.materialYou) {
+    rootStyle.setProperty('--txt-cros-sys-app_base', txt_cros_sys_app_base);
+    rootStyle.setProperty('--txt-cros-sys-app_base_shaded', txt_cros_sys_app_base_shaded);
+  }
+
   rootStyle.setProperty('--blur-radius', `${localStorage.blurRadius || 5}px`);
+  rootStyle.setProperty('--menu-blur-radius', `${localStorage.menuBlurRadius || 5}px`);
   rootStyle.setProperty('--element-opacity', `${localStorage.UIOpacity || 50}%`);
+  rootStyle.setProperty('--menu-opacity', `${localStorage.menuOpacity || 50}%`);
   rootStyle.setProperty('--cros-sys-app_base', 'var(--new-cros-sys-app_base)');
   rootStyle.setProperty('--cros-sys-app_base_shaded', 'var(--new-cros-sys-app_base_shaded)');
   rootStyle.setProperty('--cros-sys-base_elevated', 'var(--new-cros-sys-app_base)');

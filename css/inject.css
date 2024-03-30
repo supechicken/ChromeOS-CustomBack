@@ -1,21 +1,26 @@
 :root {
   --blur-radius: 5px;
+  --menu-blur-radius: 5px;
   --element-opacity: 60%;
+  --menu-opacity: 60%;
   --txt-cros-sys-app_base: 254, 251, 255;
+  --txt-cros-sys-app_base_shaded: 240, 240, 250;
   --new-cros-sys-app_base: rgba(var(--txt-cros-sys-app_base), calc(var(--element-opacity) + 10%));
-  --new-cros-sys-app_base_shaded: rgba(240, 240, 250, var(--element-opacity));
+  --new-cros-sys-app_base_shaded: rgba(var(--txt-cros-sys-app_base_shaded), var(--element-opacity));
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --txt-cros-sys-app_base: 22, 23, 29;
+    --txt-cros-sys-app_base_shaded: 0, 0, 0;
     --new-cros-sys-app_base: rgba(var(--txt-cros-sys-app_base), var(--element-opacity));
-    --new-cros-sys-app_base_shaded: rgba(0, 0, 0, var(--element-opacity));
+    --new-cros-sys-app_base_shaded: rgba(var(--txt-cros-sys-app_base_shaded), var(--element-opacity));
   }
 }
 
-#sort-menu, #file-context-menu, #gear-menu, #tasks-menu, #providers-menu, #text-context-menu {
-  backdrop-filter: blur(var(--blur-radius));
+#sort-menu, #file-context-menu, #gear-menu, #tasks-menu, #providers-menu, #text-context-menu, #previewMenu {
+  background-color: rgba(var(--txt-cros-sys-app_base_shaded), var(--menu-opacity));
+  backdrop-filter: blur(var(--menu-blur-radius));
 }
 
 .customBackground {

@@ -12,6 +12,9 @@ html, body {
   align-items: center;
 }
 
+body { width: 800px; }
+fieldset { width: 80%; }
+
 h1, h2, h3 {
   font-weight: lighter;
 }
@@ -38,12 +41,6 @@ fieldset > * {
   margin-bottom: 2px;
 }
 
-tr > td {
-  white-space: pre;
-  padding-right: 10px;
-  min-width: 150px;
-}
-
 .monospace {
   font-family: monospace;
 }
@@ -53,7 +50,12 @@ tr > td {
   align-items: center;
 }
 
-.horizontal-center > * {
+td {
+  display: inline-flex;
+  align-items: center;
+}
+
+.horizontal-center > *, td > * {
   flex-shrink: 0;
   margin: 10px 5px;
 }
@@ -65,10 +67,74 @@ tr > td {
   align-items: center;
 }
 
-.center > * {
-  flex-shrink: 0;
+.center > * { flex-shrink: 0; }
+
+.btnList_full_width, .btnList_full_width > button { width: 100%; }
+
+table                    { width: 100%; }
+tr                       { display: block; }
+td.description           { width: 150px; }
+td > input[type="range"] { width: calc(100% - 30px); }
+td.slider-td             { width: calc(100% - 180px); }
+
+input[type="file"] { width: 100%; }
+
+#preview {
+  position: relative;
+  border-radius: 10px;
+  height: 40vh;
+  width: 100%;
 }
 
-.btnList_full_width, .btnList_full_width > button {
+#preview > * { border-radius: 10px; }
+
+#previewUI {
+  position: relative;
+  background-color: var(--new-cros-sys-app_base_shaded);
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+
+#previewSubUI {
+  position: absolute;
+  height: 100%;
+  width: calc(100% - 140px);
+  top: 0;
+  right: 0;
+  background-color: var(--new-cros-sys-app_base);
+  border-radius: 10px;
+}
+
+#previewMenu {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  height: 160px;
+  border-radius: 10px;
+}
+
+#previewUI > p, #previewSubUI > p, #previewMenu > p {
+  margin: 0;
+  padding: 20px 30px 0 30px;
+}
+
+#currentImg_container {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.currentBackground {
+  display: none;
+  object-position: center;
+  object-fit: cover;
+  filter: blur(var(--blur-radius));
+  pointer-events: none;
+  user-select: none;
+  height: 100%;
   width: 100%;
 }
