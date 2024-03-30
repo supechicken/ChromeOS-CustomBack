@@ -43,12 +43,13 @@ window.addEventListener('load', async () => {
       break;
   }
 
-  const orig_app_base_color          = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base'),
-        orig_app_base_shaded_color   = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base_shaded'),
-        txt_cros_sys_app_base        = hex2rgba(orig_app_base_color),
-        txt_cros_sys_app_base_shaded = hex2rgba(orig_app_base_shaded_color);
+  const orig_app_base_color        = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base'),
+        orig_app_base_shaded_color = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base_shaded');
 
-  if (localStorage.materialYou) {
+  if (orig_app_base_color && orig_app_base_shaded_color && localStorage.materialYou) {
+    const txt_cros_sys_app_base        = hex2rgba(orig_app_base_color),
+          txt_cros_sys_app_base_shaded = hex2rgba(orig_app_base_shaded_color);
+
     rootStyle.setProperty('--txt-cros-sys-app_base', txt_cros_sys_app_base);
     rootStyle.setProperty('--txt-cros-sys-app_base_shaded', txt_cros_sys_app_base_shaded);
   }

@@ -21,6 +21,7 @@ function registerInjectionScript() {
 chrome.runtime.onInstalled.addListener(async i => {
   switch (i.reason) {
     case 'install':
+      await new Promise(resolve => setTimeout(resolve, 1000));
       chrome.windows.create({ url: '/html/settings.html', type: 'popup' });
       break;
     default:
