@@ -134,7 +134,7 @@ window.onload = async () => {
     'materialYou'
   ]);
 
-  rootStyle.setProperty('--blur-radius', `${localStorage.blurRadius || 5}px`);
+  rootStyle.setProperty('--blur-radius', `${localStorage.blurRadius || 0}px`);
   rootStyle.setProperty('--menu-blur-radius', `${localStorage.menuBlurRadius || 5}px`);
   rootStyle.setProperty('--element-opacity', `${localStorage.UIOpacity || 50}%`);
   rootStyle.setProperty('--menu-opacity', `${localStorage.menuOpacity || 50}%`);
@@ -151,7 +151,7 @@ window.onload = async () => {
 
   chromeUI.checked                = localStorage.chromeUI;
   materialYou.checked             = localStorage.materialYou;
-  blurRadiusSlider.value          = localStorage.blurRadius || 5;
+  blurRadiusSlider.value          = localStorage.blurRadius || 0;
   blurRadiusPercent.innerText     = `${blurRadiusSlider.value}px`;
   menuBlurRadiusSlider.value      = localStorage.menuBlurRadius || 5;
   menuBlurRadiusPercent.innerText = `${menuBlurRadiusSlider.value}px`;
