@@ -30,7 +30,15 @@ window.addEventListener('load', async () => {
 
   switch (location.hostname) {
     case 'os-settings':
+      break;
     case 'file-manager':
+      // inject blur code to file-quick-view shadow root
+      const fileQuickView = document.getElementById('quick-view'),
+            shadowRoot    = fileQuickView.shadowRoot,
+            newCss        = new CSSStyleSheet;
+
+      newCss.insertRule('#dialog { background-color: rgba(var(--txt-cros-sys-app_base_shaded), var(--menu-opacity)); backdrop-filter: blur(var(--menu-blur-radius)); }');
+      shadowRoot.adoptedStyleSheets.push(newCss);
       break;
     default:
       if (localStorage.chromeUI) {
