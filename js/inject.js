@@ -1,4 +1,5 @@
 const rootStyle       = document.documentElement.style,
+      bodyElement     = document.body,
       backgroundImg   = document.createElement("img"),
       backgroundVideo = document.createElement('video');
 
@@ -25,7 +26,8 @@ window.addEventListener('load', async () => {
     'UIOpacity',
     'menuOpacity',
     'chromeUI',
-    'materialYou'
+    'materialYou',
+    'movingBackground'
   ]);
 
   switch (location.hostname) {
@@ -87,5 +89,19 @@ window.addEventListener('load', async () => {
     backgroundVideo.style.display = 'initial';
 
     document.body.appendChild(backgroundImg);
+  }
+
+  if (localStorage.movingBackground) {
+    backgroundImg.style.transform = backgroundVideo.style.transform = 'scale(103%)';
+
+    document.body.addEventListener('mousemove', e => {
+      const bodyHeight = bodyElement.offsetHeight,
+            bodyWidth  = bodyElement.offsetWidth;
+
+      backgroundImg.style.objectPosition = backgroundVideo.style.objectPosition = `
+        calc(50% + ${Math.round((bodyWidth * 0.01) * (e.clientX / bodyWidth * 2 - 1))}px)
+        calc(50% + ${Math.round((bodyHeight * 0.01) * (e.clientY / bodyHeight * 2 - 1))}px)
+      `;
+    });
   }
 });

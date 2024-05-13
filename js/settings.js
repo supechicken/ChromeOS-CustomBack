@@ -12,6 +12,7 @@ const chromeURLs            = chrome.runtime.getManifest().optional_host_permiss
       menuOpacityPercent    = document.getElementById('menuOpacityPercent'),
       chromeUI              = document.getElementById('chromeUI'),
       materialYou           = document.getElementById('materialYou'),
+      movingBackground      = document.getElementById('movingBackground'),
       backgroundPicker      = document.getElementById('backgroundPicker'),
       saveBtn               = document.getElementById('saveBtn');
 
@@ -110,12 +111,13 @@ saveBtn.onclick = async () => {
   }
 
   await chrome.storage.local.set({
-    blurRadius:     blurRadiusSlider.value,
-    menuBlurRadius: menuBlurRadiusSlider.value,
-    UIOpacity:      UIOpacitySlider.value,
-    menuOpacity:    menuOpacitySlider.value,
-    chromeUI:       chromeUI.checked,
-    materialYou:    materialYou.checked
+    blurRadius:       blurRadiusSlider.value,
+    menuBlurRadius:   menuBlurRadiusSlider.value,
+    UIOpacity:        UIOpacitySlider.value,
+    menuOpacity:      menuOpacitySlider.value,
+    chromeUI:         chromeUI.checked,
+    materialYou:      materialYou.checked,
+    movingBackground: movingBackground.checked
   }).then(() => {
     printLog('Options saved.');
     alert("Changes saved.");
@@ -131,7 +133,8 @@ window.onload = async () => {
     'UIOpacity',
     'menuOpacity',
     'chromeUI',
-    'materialYou'
+    'materialYou',
+    'movingBackground'
   ]);
 
   rootStyle.setProperty('--blur-radius', `${localStorage.blurRadius || 0}px`);
@@ -150,7 +153,8 @@ window.onload = async () => {
   }
 
   chromeUI.checked                = localStorage.chromeUI;
-  materialYou.checked             = localStorage.materialYou;
+  materialYou.checked             = (localStorage.materialYou === undefined) ? true : localStorage.materialYou;
+  movingBackground.checked        = (localStorage.movingBackground === undefined) ? true : localStorage.movingBackground;
   blurRadiusSlider.value          = localStorage.blurRadius || 0;
   blurRadiusPercent.innerText     = `${blurRadiusSlider.value}px`;
   menuBlurRadiusSlider.value      = localStorage.menuBlurRadius || 5;
@@ -158,5 +162,5 @@ window.onload = async () => {
   UIOpacitySlider.value           = localStorage.UIOpacity || 50;
   UIOpacityPercent.innerText      = `${UIOpacitySlider.value}%`
   menuOpacitySlider.value         = localStorage.menuOpacity || 50;
-  menuOpacityPercent.innerText    = `${menuOpacitySlider.value}%`
+  menuOpacityPercent.innerText    = `${menuOpacitySlider.value}%`;
 };
