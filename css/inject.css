@@ -18,7 +18,7 @@
 }
 
 #sort-menu, #file-context-menu, #roots-context-menu, #directory-tree-context-menu, #gear-menu, #tasks-menu, #providers-menu, #text-context-menu, #previewMenu {
-  background-color: rgba(var(--txt-cros-sys-app_base_shaded), var(--menu-opacity));
+  background-color: rgba(var(--txt-cros-sys-app_base_shaded, var(--default-color)), var(--menu-opacity));
   backdrop-filter: blur(var(--menu-blur-radius));
 }
 

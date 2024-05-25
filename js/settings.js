@@ -34,6 +34,23 @@ function getDataURL(file) {
   });
 }
 
+async function img2webp(imgBlob) {
+  const img = new Image();
+
+  img.src = URL.createObjectURL(imgBlob);
+  await new Promise(resolve => img.onload = resolve);
+
+  const canvas = new OffscreenCanvas(img.naturalWidth, img.naturalHeight),
+        ctx    = canvas.getContext('2d');
+
+  ctx.drawImage(img, 0, 0);
+
+  const result = await canvas.convertToBlob({ type: 'image/webp', quality: 0.9 });
+
+  printLog(`img2webp: ${imgBlob.size} bytes -> ${result.size} bytes (reduced ${Math.round((imgBlob.size - result.size) / imgBlob.size * 100)}%)`);
+  return result;
+}
+
 // set labels according to sliders
 blurRadiusSlider.oninput = blurRadiusSlider.onchange = () => {
   rootStyle.setProperty('--blur-radius', `${blurRadiusSlider.value}px`);
@@ -70,15 +87,18 @@ backgroundPicker.onchange = async () => {
 
 // save changes
 saveBtn.onclick = async () => {
+  saveBtn.disabled = true;
+
   const registration   = await chrome.scripting.getRegisteredContentScripts({ids: ["injection-script"]}).then(s => s[0]),
         backgroundFile = backgroundPicker.files[0];
 
   await chrome.permissions.request({ origins: chromeURLs }).then(() => {
     printLog('Permission acquired!');
   }).catch(e => {
+    saveBtn.disabled = false;
     console.error(e);
     alert('Failed to acquire permission for chrome:// URLs.\n\nDoes the "Extensions on chrome:// URLs" flag enabled?');
-    throw new Error('Failed to acquire permission for chrome:// URLs.')
+    throw new Error('Failed to acquire permission for chrome:// URLs.');
   });
 
   if (registration) {
@@ -95,6 +115,7 @@ saveBtn.onclick = async () => {
     }]).then(() => {
       printLog('Injection script registered!');
     }).catch(e => {
+      saveBtn.disabled = false;
       console.error(e);
       alert('Failed to register injection script.\n\nDoes the "Extensions on chrome:// URLs" flag enabled?');
       throw new Error('Failed to register injection script.');
@@ -102,7 +123,17 @@ saveBtn.onclick = async () => {
   }
 
   if (backgroundFile) {
-    const dataURL = await getDataURL(backgroundFile);
+    let dataURL;
+
+    if (backgroundFile.type.startsWith('image/')) {
+      // convert image to webp to reduce file size
+      printLog('Converting image to WebP...');
+      const webpImg = await img2webp(backgroundFile);
+      dataURL       = await getDataURL(webpImg);
+    } else {
+      dataURL = await getDataURL(backgroundFile);
+    }
+
     await chrome.storage.local.set({
       backgroundURL:  dataURL,
       backgroundType: backgroundFile.type
@@ -117,6 +148,7 @@ saveBtn.onclick = async () => {
     chromeUI:         chromeUI.checked,
     movingBackground: movingBackground.checked
   }).then(() => {
+    saveBtn.disabled = false;
     printLog('Options saved.');
     alert("Changes saved.");
   });

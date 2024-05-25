@@ -1,8 +1,8 @@
-a, button {
+a, button, input[type="file"]::file-selector-button {
   font-family: 'Google Sans', sans-serif;
   text-decoration: none;
   background-color: transparent;
-  color: rgb(26,115,232);
+  color: rgb(26, 115, 232);
   font-size: 1rem;
   font-weight: 500;
   padding: 10px 20px;
@@ -11,19 +11,30 @@ a, button {
   border-radius: 20px;
   border: 2px solid #cccccc7d;
   opacity: 1;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s, background-color 0.3s;
   cursor: pointer;
 }
 
-a:hover, button:hover {
+input[type="file"]::file-selector-button {
+  margin-right: 10px;
+  padding: 7px 12px;
+  font-size: 0.95rem;
+}
+
+a:disabled, button:disabled {
+  opacity: 50%;
+  cursor: not-allowed;
+}
+
+a:hover, button:hover, input[type="file"]::file-selector-button:hover {
   background-color: #5e71d212;
 }
 
-a.tone2, button.tone2 {
+a.tone2, button.tone2, input[type="file"]::file-selector-button.tone2 {
   background-color: #1a73e8;
   color: white;
 }
 
-a.tone2:hover, button.tone2:hover {
+a.tone2:hover, button.tone2:hover, input[type="file"]::file-selector-button.tone2:hover {
   opacity: 0.9;
 }
