@@ -35,17 +35,18 @@
     </div>
   </fieldset>
   <fieldset>
-    <legend>Pick a new background (video supported on ChromeOS Files App only)</legend>
+    <legend>Pick a new background (video supported)</legend>
     <input id="backgroundPicker" type="file" accept="image/*,video/*" />
   </fieldset>
   <fieldset>
     <legend>Options</legend>
-    <div class="horizontal-center">
+    <div id="chromeUISection" class="horizontal-center">
       <label class="switch">
         <input type="checkbox" id="chromeUI">
         <span class="slider round"></span>
       </label>
       <label for="chromeUI">Enable on Chrome UI (e.g. bookmark page)</label>
+      <label id="chromeUIinfo">🛈</label>
     </div>
 
     <div class="horizontal-center">

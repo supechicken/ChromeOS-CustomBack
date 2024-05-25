@@ -1,4 +1,5 @@
 const chromeURLs            = chrome.runtime.getManifest().optional_host_permissions,
+      chromeVersion         = parseInt(navigator.userAgent.match(/Chrome\/([0-9]+)/)[1]),
       rootStyle             = document.documentElement.style,
       currentVideo          = document.getElementById('currentVideo'),
       currentImg            = document.getElementById('currentImg'),
@@ -10,6 +11,8 @@ const chromeURLs            = chrome.runtime.getManifest().optional_host_permiss
       UIOpacityPercent      = document.getElementById('UIOpacityPercent'),
       menuOpacitySlider     = document.getElementById('menuOpacitySlider'),
       menuOpacityPercent    = document.getElementById('menuOpacityPercent'),
+      chromeUISection       = document.getElementById('chromeUISection'),
+      chromeUIinfo          = document.getElementById('chromeUIinfo'),
       chromeUI              = document.getElementById('chromeUI'),
       movingBackground      = document.getElementById('movingBackground'),
       backgroundPicker      = document.getElementById('backgroundPicker'),
@@ -51,6 +54,10 @@ async function img2webp(imgBlob) {
   return result;
 }
 
+chromeUIinfo.onclick = () => {
+  alert('Not supported for videos on Chrome v124+ due to tightened Content Security Policy (CSP) on built-in pages');
+}
+
 // set labels according to sliders
 blurRadiusSlider.oninput = blurRadiusSlider.onchange = () => {
   rootStyle.setProperty('--blur-radius', `${blurRadiusSlider.value}px`);
@@ -77,11 +84,28 @@ backgroundPicker.onchange = async () => {
   const backgroundFile = backgroundPicker.files[0];
 
   if (backgroundFile.type.startsWith('video/')) {
-    currentVideo.src = URL.createObjectURL(backgroundFile);
+    if (chromeVersion >= 124) {
+      chromeUI.checked      = false;
+      chromeUI.disabled     = true;
+      chromeUISection.title = 'Not supported for videos on Chrome v124+ due to tightened Content Security Policy (CSP) on built-in pages';
+      chromeUISection.classList.add('disabled');
+      chromeUISection.querySelector('.switch > .slider').classList.add('disabled');
+    }
+
+    currentVideo.src           = URL.createObjectURL(backgroundFile);
     currentVideo.style.display = 'initial';
+    currentImg.style.display   = 'none';
   } else {
-    currentImg.src = URL.createObjectURL(backgroundFile);
-    currentImg.style.display = 'initial';
+    if (chromeVersion >= 124) {
+      chromeUI.disabled     = false;
+      chromeUISection.title = '';
+      chromeUISection.classList.remove('disabled');
+      chromeUISection.querySelector('.switch > .slider').classList.remove('disabled');
+    }
+
+    currentImg.src             = URL.createObjectURL(backgroundFile);
+    currentImg.style.display   = 'initial';
+    currentVideo.style.display = 'none';
   }
 };
 

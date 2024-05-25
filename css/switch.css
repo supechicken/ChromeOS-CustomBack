@@ -25,6 +25,10 @@
   transition: .4s;
 }
 
+.slider.disabled {
+  cursor: not-allowed;
+}
+
 .slider:before {
   position: absolute;
   content: "";
