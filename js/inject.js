@@ -2,6 +2,7 @@ const colorVars = [
   'cr-card-background-color',
   'cros-sys-app_base',
   'cros-sys-app_base_shaded',
+  'cros-sys-base_elevated',
   'cros-sys-surface',
   'cros-sys-surface1',
   'cros-sys-surface2',
