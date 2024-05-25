@@ -11,7 +11,6 @@ const chromeURLs            = chrome.runtime.getManifest().optional_host_permiss
       menuOpacitySlider     = document.getElementById('menuOpacitySlider'),
       menuOpacityPercent    = document.getElementById('menuOpacityPercent'),
       chromeUI              = document.getElementById('chromeUI'),
-      materialYou           = document.getElementById('materialYou'),
       movingBackground      = document.getElementById('movingBackground'),
       backgroundPicker      = document.getElementById('backgroundPicker'),
       saveBtn               = document.getElementById('saveBtn');
@@ -116,7 +115,6 @@ saveBtn.onclick = async () => {
     UIOpacity:        UIOpacitySlider.value,
     menuOpacity:      menuOpacitySlider.value,
     chromeUI:         chromeUI.checked,
-    materialYou:      materialYou.checked,
     movingBackground: movingBackground.checked
   }).then(() => {
     printLog('Options saved.');
@@ -133,7 +131,6 @@ window.onload = async () => {
     'UIOpacity',
     'menuOpacity',
     'chromeUI',
-    'materialYou',
     'movingBackground'
   ]);
 
@@ -153,7 +150,6 @@ window.onload = async () => {
   }
 
   chromeUI.checked                = localStorage.chromeUI;
-  materialYou.checked             = (localStorage.materialYou === undefined) ? true : localStorage.materialYou;
   movingBackground.checked        = (localStorage.movingBackground === undefined) ? true : localStorage.movingBackground;
   blurRadiusSlider.value          = localStorage.blurRadius || 0;
   blurRadiusPercent.innerText     = `${blurRadiusSlider.value}px`;

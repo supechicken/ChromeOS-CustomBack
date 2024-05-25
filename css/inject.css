@@ -3,8 +3,7 @@
   --menu-blur-radius: 5px;
   --element-opacity: 60%;
   --menu-opacity: 60%;
-  --txt-cros-sys-app_base: 254, 251, 255;
-  --txt-cros-sys-app_base_shaded: 240, 240, 250;
+
   --new-cros-sys-app_base: rgba(var(--txt-cros-sys-app_base), calc(var(--element-opacity) + 10%));
   --new-cros-sys-app_base_shaded: rgba(var(--txt-cros-sys-app_base_shaded), var(--element-opacity));
 }

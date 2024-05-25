@@ -26,7 +26,6 @@ window.addEventListener('load', async () => {
     'UIOpacity',
     'menuOpacity',
     'chromeUI',
-    'materialYou',
     'movingBackground'
   ]);
 
@@ -53,16 +52,13 @@ window.addEventListener('load', async () => {
       break;
   }
 
-  const orig_app_base_color        = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base'),
-        orig_app_base_shaded_color = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base_shaded');
+  const orig_app_base_color          = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base'),
+        orig_app_base_shaded_color   = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base_shaded'),
+        txt_cros_sys_app_base        = hex2rgba(orig_app_base_color),
+        txt_cros_sys_app_base_shaded = hex2rgba(orig_app_base_shaded_color);
 
-  if (orig_app_base_color && orig_app_base_shaded_color && localStorage.materialYou) {
-    const txt_cros_sys_app_base        = hex2rgba(orig_app_base_color),
-          txt_cros_sys_app_base_shaded = hex2rgba(orig_app_base_shaded_color);
-
-    rootStyle.setProperty('--txt-cros-sys-app_base', txt_cros_sys_app_base);
-    rootStyle.setProperty('--txt-cros-sys-app_base_shaded', txt_cros_sys_app_base_shaded);
-  }
+  rootStyle.setProperty('--txt-cros-sys-app_base', txt_cros_sys_app_base);
+  rootStyle.setProperty('--txt-cros-sys-app_base_shaded', txt_cros_sys_app_base_shaded);
 
   rootStyle.setProperty('--blur-radius', `${localStorage.blurRadius || 5}px`);
   rootStyle.setProperty('--menu-blur-radius', `${localStorage.menuBlurRadius || 5}px`);
