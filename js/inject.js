@@ -42,8 +42,6 @@ window.addEventListener('load', async () => {
   ]);
 
   switch (location.hostname) {
-    case 'os-settings':
-      break;
     case 'file-manager':
       // inject blur code to file-quick-view shadow root
       const fileQuickView = document.getElementById('quick-view'),

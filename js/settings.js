@@ -197,6 +197,14 @@ window.onload = async () => {
 
   if (localStorage.backgroundURL) {
     if (localStorage.backgroundType.startsWith('video/')) {
+      if (chromeVersion >= 124) {
+        chromeUI.checked      = false;
+        chromeUI.disabled     = true;
+        chromeUISection.title = 'Not supported for videos on Chrome v124+ due to tightened Content Security Policy (CSP) on built-in pages';
+        chromeUISection.classList.add('disabled');
+        chromeUISection.querySelector('.switch > .slider').classList.add('disabled');
+      }
+
       currentVideo.style.display = 'initial';
       currentVideo.src           = localStorage.backgroundURL;
     } else {
