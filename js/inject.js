@@ -1,3 +1,15 @@
+const colorVars = [
+  'cr-card-background-color',
+  'cros-sys-app_base',
+  'cros-sys-app_base_shaded',
+  'cros-sys-surface',
+  'cros-sys-surface1',
+  'cros-sys-surface2',
+  'cros-sys-surface3',
+  'cros-sys-surface4',
+  'cros-sys-surface5'
+];
+
 const rootStyle       = document.documentElement.style,
       bodyElement     = document.body,
       backgroundImg   = document.createElement("img"),
@@ -12,9 +24,9 @@ function printLog(message) {
   }
 }
 
-function hex2rgba(str) {
-  return str.match(/^\#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/).
-         slice(1, -1).map(hex => parseInt(hex, 16)).join(', ');
+function hex2rgb(str) {
+  return str.match(/^\#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/).
+         slice(1).map(hex => parseInt(hex, 16)).join(', ');
 }
 
 window.addEventListener('load', async () => {
@@ -52,22 +64,19 @@ window.addEventListener('load', async () => {
       break;
   }
 
-  const orig_app_base_color          = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base'),
-        orig_app_base_shaded_color   = getComputedStyle(document.documentElement).getPropertyValue('--cros-sys-app_base_shaded'),
-        txt_cros_sys_app_base        = hex2rgba(orig_app_base_color),
-        txt_cros_sys_app_base_shaded = hex2rgba(orig_app_base_shaded_color);
-
-  rootStyle.setProperty('--txt-cros-sys-app_base', txt_cros_sys_app_base);
-  rootStyle.setProperty('--txt-cros-sys-app_base_shaded', txt_cros_sys_app_base_shaded);
-
   rootStyle.setProperty('--blur-radius', `${localStorage.blurRadius || 5}px`);
   rootStyle.setProperty('--menu-blur-radius', `${localStorage.menuBlurRadius || 5}px`);
   rootStyle.setProperty('--element-opacity', `${localStorage.UIOpacity || 50}%`);
   rootStyle.setProperty('--menu-opacity', `${localStorage.menuOpacity || 50}%`);
-  rootStyle.setProperty('--cros-sys-app_base', 'var(--new-cros-sys-app_base)');
-  rootStyle.setProperty('--cros-sys-app_base_shaded', 'var(--new-cros-sys-app_base_shaded)');
-  rootStyle.setProperty('--cros-sys-base_elevated', 'var(--new-cros-sys-app_base)');
-  rootStyle.setProperty('--cr-card-background-color', 'var(--new-cros-sys-app_base)');
+
+  colorVars.forEach(varName => {
+    const orig_color = getComputedStyle(document.documentElement).getPropertyValue(`--${varName}`);
+
+    if (!orig_color) return;
+
+    rootStyle.setProperty(`--txt-${varName}`, hex2rgb(orig_color));
+    rootStyle.setProperty(`--${varName}`, `var(--new-${varName})`);
+  });
 
   printLog('Style injected!');
 

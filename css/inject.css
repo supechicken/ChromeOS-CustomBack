@@ -4,17 +4,17 @@
   --element-opacity: 60%;
   --menu-opacity: 60%;
 
-  --new-cros-sys-app_base: rgba(var(--txt-cros-sys-app_base), calc(var(--element-opacity) + 10%));
-  --new-cros-sys-app_base_shaded: rgba(var(--txt-cros-sys-app_base_shaded), var(--element-opacity));
-}
+  --default-color: 32, 33, 36;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --txt-cros-sys-app_base: 22, 23, 29;
-    --txt-cros-sys-app_base_shaded: 0, 0, 0;
-    --new-cros-sys-app_base: rgba(var(--txt-cros-sys-app_base), var(--element-opacity));
-    --new-cros-sys-app_base_shaded: rgba(var(--txt-cros-sys-app_base_shaded), var(--element-opacity));
-  }
+  --new-cr-card-background-color: rgba(var(--txt-cr-card-background-color, var(--default-color)), var(--element-opacity));
+  --new-cros-sys-app_base:        rgba(var(--txt-cros-sys-app_base, var(--default-color)),        calc(var(--element-opacity) + 10%));
+  --new-cros-sys-app_base_shaded: rgba(var(--txt-cros-sys-app_base_shaded, var(--default-color)), var(--element-opacity));
+  --new-cros-sys-surface:         rgba(var(--txt-cros-sys-surface, var(--default-color)),         var(--element-opacity));
+  --new-cros-sys-surface1:        rgba(var(--txt-cros-sys-surface1, var(--default-color)),        var(--element-opacity));
+  --new-cros-sys-surface2:        rgba(var(--txt-cros-sys-surface2, var(--default-color)),        var(--element-opacity));
+  --new-cros-sys-surface3:        rgba(var(--txt-cros-sys-surface3, var(--default-color)),        var(--element-opacity));
+  --new-cros-sys-surface4:        rgba(var(--txt-cros-sys-surface4, var(--default-color)),        var(--element-opacity));
+  --new-cros-sys-surface5:        rgba(var(--txt-cros-sys-surface5, var(--default-color)),        var(--element-opacity));
 }
 
 #sort-menu, #file-context-menu, #roots-context-menu, #directory-tree-context-menu, #gear-menu, #tasks-menu, #providers-menu, #text-context-menu, #previewMenu {
