@@ -8,7 +8,7 @@
 ## Screenshots
 [Live background preview on YouTube](https://www.youtube.com/watch?v=laEScKlNGio)
 
-<img width="350" src="/img/screenshots/files-app.png" /><img width="350" src="/img/screenshots/extensions-tab.png" />
+<img width="370" src="/img/screenshots/files-app.webp" /><img width="370" src="/img/screenshots/cros-settings.webp" />
 
 ## Install from this repository
 > [!NOTE]
