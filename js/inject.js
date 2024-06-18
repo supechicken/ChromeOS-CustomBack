@@ -11,7 +11,8 @@ const colorVars = [
   'cros-sys-surface5'
 ];
 
-const rootStyle       = document.documentElement.style,
+const origStyle       = getComputedStyle(document.documentElement),
+      injectedStyle   = new CSSStyleSheet,
       bodyElement     = document.body,
       backgroundImg   = document.createElement("img"),
       backgroundVideo = document.createElement('video');
@@ -25,9 +26,35 @@ function printLog(message) {
   }
 }
 
-function hex2rgb(str) {
-  return str.match(/^\#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/).
-         slice(1).map(hex => parseInt(hex, 16)).join(', ');
+function color2hex(colorStr) {
+  const ctx     = document.createElement('canvas').getContext('2d');
+  ctx.fillStyle = colorStr;
+
+  const color = ctx.fillStyle;
+
+  if (color.startsWith('rgba')) {
+    // RGBA code
+    return color.match(/^rgba\((.+?), (.+?), (.+?), .+?\)$/).slice(1)
+  } else {
+    // hex code
+    return color.match(/^\#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/).
+           slice(1).map(hex => parseInt(hex, 16)).join(', ');
+  }
+}
+
+function appendCSS(css, isGlobal = false) {
+  return injectedStyle.insertRule(`${isGlobal ? ':root' : 'body'} { ${css} }`);
+}
+
+function setupColorVariables() {
+  colorVars.forEach(varName => {
+    const origColor = getComputedStyle(document.documentElement).getPropertyValue(`--${varName}`);
+
+    if (!origColor) return;
+
+    appendCSS(`--txt-${varName}: ${color2hex(origColor)};`, true);
+    appendCSS(`--${varName}: var(--new-${varName});`);
+  });
 }
 
 window.addEventListener('load', async () => {
@@ -46,36 +73,38 @@ window.addEventListener('load', async () => {
     case 'file-manager':
       // inject blur code to file-quick-view shadow root
       const fileQuickView = document.getElementById('quick-view'),
-            shadowRoot    = fileQuickView.shadowRoot,
-            newCss        = new CSSStyleSheet;
+            shadowRoot    = fileQuickView.shadowRoot;
 
-      newCss.insertRule('#dialog { background-color: rgba(var(--txt-cros-sys-app_base_shaded), var(--menu-opacity)); backdrop-filter: blur(var(--menu-blur-radius)); }');
-      shadowRoot.adoptedStyleSheets.push(newCss);
+      injectedStyle.insertRule(`
+        #dialog {
+          background-color: rgba(var(--txt-cros-sys-app_base_shaded), var(--menu-opacity));
+          backdrop-filter: blur(var(--menu-blur-radius));
+        }
+      `);
+
+      shadowRoot.adoptedStyleSheets.push(injectedStyle);
       break;
     default:
       if (localStorage.chromeUI) {
         document.querySelectorAll('body > *:not(#backgroundImg)').forEach(e => {
           e.style.backgroundColor = 'var(--new-cros-sys-app_base_shaded)'
         });
+
+        break;
       } else {
         return;
       }
-      break;
   }
 
-  rootStyle.setProperty('--blur-radius', `${localStorage.blurRadius || 5}px`);
-  rootStyle.setProperty('--menu-blur-radius', `${localStorage.menuBlurRadius || 5}px`);
-  rootStyle.setProperty('--element-opacity', `${localStorage.UIOpacity || 50}%`);
-  rootStyle.setProperty('--menu-opacity', `${localStorage.menuOpacity || 50}%`);
+  appendCSS(`
+    --blur-radius:      ${localStorage.blurRadius || 5}px;
+    --menu-blur-radius: ${localStorage.menuBlurRadius || 5}px;
+    --element-opacity:  ${localStorage.UIOpacity || 50}%;
+    --menu-opacity:     ${localStorage.menuOpacity || 50}%;
+  `, true);
 
-  colorVars.forEach(varName => {
-    const orig_color = getComputedStyle(document.documentElement).getPropertyValue(`--${varName}`);
-
-    if (!orig_color) return;
-
-    rootStyle.setProperty(`--txt-${varName}`, hex2rgb(orig_color));
-    rootStyle.setProperty(`--${varName}`, `var(--new-${varName})`);
-  });
+  setupColorVariables();
+  document.adoptedStyleSheets.push(injectedStyle);
 
   printLog('Style injected!');
 

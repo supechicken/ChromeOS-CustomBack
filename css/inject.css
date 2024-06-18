@@ -4,7 +4,7 @@
   --element-opacity: 60%;
   --menu-opacity: 60%;
 
-  --default-color: 32, 33, 36;
+  --default-color: 255, 255, 255;
 
   --new-cr-card-background-color: rgba(var(--txt-cr-card-background-color, var(--default-color)),   var(--element-opacity));
   --new-cros-sys-app_base:        rgba(var(--txt-cros-sys-app_base, var(--default-color)),          calc(var(--element-opacity) + 10%));
@@ -16,6 +16,12 @@
   --new-cros-sys-surface3:        rgba(var(--txt-cros-sys-surface3, var(--default-color)),          calc(var(--element-opacity) + 15%));
   --new-cros-sys-surface4:        rgba(var(--txt-cros-sys-surface4, var(--default-color)),          calc(var(--element-opacity) + 15%));
   --new-cros-sys-surface5:        rgba(var(--txt-cros-sys-surface5, var(--default-color)),          calc(var(--element-opacity) + 15%));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --default-color: 32, 33, 36;
+  }
 }
 
 #sort-menu, #file-context-menu, #roots-context-menu, #directory-tree-context-menu, #gear-menu, #tasks-menu, #providers-menu, #text-context-menu, #previewMenu {
