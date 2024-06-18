@@ -1,5 +1,6 @@
 {
   "manifest_version": 3,
+  "minimum_chrome_version": "119",
   "name": "ChromeOS CustomBack",
   "version": "2.2",
   "description": "Custom background for ChromeOS built-in pages/apps.",
