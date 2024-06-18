@@ -1,5 +1,6 @@
 const colorVars = [
   'cr-card-background-color',
+  'cr-drawer-background-color',
   'cros-sys-app_base',
   'cros-sys-app_base_shaded',
   'cros-sys-base_elevated',
@@ -55,10 +56,20 @@ window.addEventListener('load', async () => {
 
       fileQuickView.adoptedStyleSheets.push(injectedStyle);
       break;
+    case 'os-settings':
+      // inject blur code to cr-drawer shadow root
+      const mainElement     = document.querySelector('os-settings-ui'),
+            crDrawer        = mainElement.shadowRoot.getElementById('drawer').shadowRoot;
+
+      mainElement.style.backgroundColor = 'var(--new-cros-sys-app_base_shaded)';
+      injectedStyle.insertRule(`#dialog { backdrop-filter: blur(var(--menu-blur-radius)); }`);
+
+      crDrawer.adoptedStyleSheets.push(injectedStyle);
+      break;
     default:
       if (localStorage.chromeUI) {
         document.querySelectorAll('body > *:not(#backgroundImg)').forEach(e => {
-          e.style.backgroundColor = 'var(--new-cros-sys-app_base_shaded)'
+          e.style.backgroundColor = 'rgb(from var(--new-cros-sys-app_base_shaded) r g b / var(--tertiary-opacity))';
         });
 
         if (location.hostname === 'extensions') {

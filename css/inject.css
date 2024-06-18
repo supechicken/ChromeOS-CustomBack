@@ -1,22 +1,23 @@
 :root {
   --blur-radius:       0;
   --menu-blur-radius:  5px;
-  --element-opacity:   60%;
+  --element-opacity:   50%;
   --secondary-opacity: calc(var(--element-opacity) + 10%);
   --tertiary-opacity:  calc(var(--element-opacity) + 15%);
   --menu-opacity:      60%;
   --default-color:     white; /* light-dark() does not work with relative color syntax */
 
-  --new-cr-card-background-color: rgb(from var(--cr-card-background-color,   var(--default-color)) r g b / var(--element-opacity));
-  --new-cros-sys-app_base:        rgb(from var(--cros-sys-app_base,          var(--default-color)) r g b / var(--secondary-opacity));
-  --new-cros-sys-app_base_shaded: rgb(from var(--cros-sys-app_base_shaded,   var(--default-color)) r g b / var(--element-opacity));
-  --new-cros-sys-base_elevated:   rgb(from var(--cros-sys-app_base_elevated, var(--default-color)) r g b / var(--secondary-opacity));
-  --new-cros-sys-surface:         rgb(from var(--cros-sys-surface,           var(--default-color)) r g b / var(--element-opacity));
-  --new-cros-sys-surface1:        rgb(from var(--cros-sys-surface1,          var(--default-color)) r g b / var(--tertiary-opacity));
-  --new-cros-sys-surface2:        rgb(from var(--cros-sys-surface2,          var(--default-color)) r g b / var(--tertiary-opacity));
-  --new-cros-sys-surface3:        rgb(from var(--cros-sys-surface3,          var(--default-color)) r g b / var(--tertiary-opacity));
-  --new-cros-sys-surface4:        rgb(from var(--cros-sys-surface4,          var(--default-color)) r g b / var(--tertiary-opacity));
-  --new-cros-sys-surface5:        rgb(from var(--cros-sys-surface5,          var(--default-color)) r g b / var(--tertiary-opacity));
+  --new-cr-card-background-color:   rgb(from var(--cr-card-background-color,   var(--default-color)) r g b / var(--element-opacity));
+  --new-cr-drawer-background-color: rgb(from var(--cr-drawer-background-color, var(--default-color)) r g b / var(--menu-opacity));
+  --new-cros-sys-app_base:          rgb(from var(--cros-sys-app_base,          var(--default-color)) r g b / var(--secondary-opacity));
+  --new-cros-sys-app_base_shaded:   rgb(from var(--cros-sys-app_base_shaded,   var(--default-color)) r g b / var(--element-opacity));
+  --new-cros-sys-base_elevated:     rgb(from var(--cros-sys-app_base_elevated, var(--default-color)) r g b / var(--secondary-opacity));
+  --new-cros-sys-surface:           rgb(from var(--cros-sys-surface,           var(--default-color)) r g b / var(--element-opacity));
+  --new-cros-sys-surface1:          rgb(from var(--cros-sys-surface1,          var(--default-color)) r g b / var(--tertiary-opacity));
+  --new-cros-sys-surface2:          rgb(from var(--cros-sys-surface2,          var(--default-color)) r g b / var(--tertiary-opacity));
+  --new-cros-sys-surface3:          rgb(from var(--cros-sys-surface3,          var(--default-color)) r g b / var(--tertiary-opacity));
+  --new-cros-sys-surface4:          rgb(from var(--cros-sys-surface4,          var(--default-color)) r g b / var(--tertiary-opacity));
+  --new-cros-sys-surface5:          rgb(from var(--cros-sys-surface5,          var(--default-color)) r g b / var(--tertiary-opacity));
 }
 
 @media (prefers-color-scheme: dark) {
