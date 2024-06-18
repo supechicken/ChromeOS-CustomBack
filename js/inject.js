@@ -68,8 +68,26 @@ window.addEventListener('load', async () => {
       break;
     default:
       if (localStorage.chromeUI) {
+        const drawer_inject_blur = e => {
+          const shadowRoot = e.shadowRoot,
+                container  = shadowRoot.getElementById('dialog');
+
+          container.style.backdropFilter = `blur(var(--menu-blur-radius))`;
+        };
+
+        const drawer_observer = new MutationObserver((records, _) => {
+          records[0].addedNodes?.forEach(e => {
+            if (e.tagName === 'CR-DRAWER') drawer_inject_blur(e);
+          });
+        });
+
         document.querySelectorAll('body > *:not(#backgroundImg)').forEach(e => {
           e.style.backgroundColor = 'rgb(from var(--new-cros-sys-app_base_shaded) r g b / var(--tertiary-opacity))';
+
+          if (!e.shadowRoot) return;
+
+          e.shadowRoot.querySelectorAll('cr-drawer').forEach(drawer => drawer_inject_blur(drawer));
+          drawer_observer.observe(e.shadowRoot, { childList: true });
         });
 
         if (location.hostname === 'extensions') {
@@ -94,11 +112,7 @@ window.addEventListener('load', async () => {
     --menu-opacity:     ${localStorage.menuOpacity || 50}%;
   `, true);
 
-  colorVars.forEach(varName => {
-    const origColor = getComputedStyle(document.documentElement).getPropertyValue(`--${varName}`);
-
-    if (origColor) appendCSS(`--${varName}: var(--new-${varName});`);
-  });
+  colorVars.forEach(varName => appendCSS(`--${varName}: var(--new-${varName});`));
 
   document.adoptedStyleSheets.push(injectedStyle);
 
