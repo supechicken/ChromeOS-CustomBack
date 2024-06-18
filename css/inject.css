@@ -27,7 +27,7 @@
 }
 
 #sort-menu, #file-context-menu, #roots-context-menu, #directory-tree-context-menu, #gear-menu, #tasks-menu, #providers-menu, #text-context-menu, #previewMenu {
-  background-color: rgb(var(--cros-sys-app_base_shaded, var(--default-color)) r g b / var(--menu-opacity));
+  background-color: rgb(from var(--new-cros-sys-app_base_shaded, var(--default-color)) r g b / var(--menu-opacity));
   backdrop-filter:  blur(var(--menu-blur-radius));
 }
 
