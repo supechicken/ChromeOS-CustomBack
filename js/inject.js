@@ -9,7 +9,8 @@ const colorVars = [
   'cros-sys-surface2',
   'cros-sys-surface3',
   'cros-sys-surface4',
-  'cros-sys-surface5'
+  'cros-sys-surface5',
+  'settings-base-bg-color'
 ];
 
 const injectedStyle   = new CSSStyleSheet,

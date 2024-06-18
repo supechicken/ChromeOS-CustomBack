@@ -18,6 +18,7 @@
   --new-cros-sys-surface3:          rgb(from var(--cros-sys-surface3,          var(--default-color)) r g b / var(--tertiary-opacity));
   --new-cros-sys-surface4:          rgb(from var(--cros-sys-surface4,          var(--default-color)) r g b / var(--tertiary-opacity));
   --new-cros-sys-surface5:          rgb(from var(--cros-sys-surface5,          var(--default-color)) r g b / var(--tertiary-opacity));
+  --new-settings-base-bg-color:     rgb(from var(--settings-base-bg-color,     var(--default-color)) r g b / var(--element-opacity));
 }
 
 @media (prefers-color-scheme: dark) {
