@@ -16,7 +16,8 @@ const colorVars = [
 const injectedStyle   = new CSSStyleSheet,
       bodyElement     = document.body,
       backgroundImg   = document.createElement("img"),
-      backgroundVideo = document.createElement('video');
+      backgroundVideo = document.createElement('video'),
+      isChromeUI      = (location.hostname !== 'file-manager');
 
 function printLog(message) {
   // printLog(): print to browser console
@@ -32,16 +33,29 @@ function appendCSS(css, isGlobal = false) {
 }
 
 window.addEventListener('load', async () => {
+  printLog('Content script injected!');
+
   const localStorage = await chrome.storage.local.get([
     'backgroundURL',
     'backgroundType',
+    'chromeUIBgURL',
     'blurRadius',
+    'chromeUIBlurRadius',
     'menuBlurRadius',
     'UIOpacity',
+    'chromeUIOpacity',
     'menuOpacity',
     'chromeUI',
     'movingBackground'
   ]);
+
+  const backgroundURL  = isChromeUI ? localStorage.chromeUIBgURL : localStorage.backgroundURL,
+        backgroundType = isChromeUI ? 'image/webp' : localStorage.backgroundType,
+        blurRadius     = isChromeUI ? localStorage.chromeUIBlurRadius : localStorage.blurRadius,
+        UIOpacity      = isChromeUI ? localStorage.chromeUIOpacity : localStorage.UIOpacity;
+
+  // stop if no custom background selected
+  if (!backgroundURL) return;
 
   switch (location.hostname) {
     case 'file-manager':
@@ -58,15 +72,19 @@ window.addEventListener('load', async () => {
       fileQuickView.adoptedStyleSheets.push(injectedStyle);
       break;
     case 'os-settings':
-      // inject blur code to cr-drawer shadow root
-      const mainElement     = document.querySelector('os-settings-ui'),
-            crDrawer        = mainElement.shadowRoot.getElementById('drawer').shadowRoot;
+      if (localStorage.chromeUI) {
+        // inject blur code to cr-drawer shadow root
+        const mainElement     = document.querySelector('os-settings-ui'),
+              crDrawer        = mainElement.shadowRoot.getElementById('drawer').shadowRoot;
 
-      mainElement.style.backgroundColor = 'var(--new-cros-sys-app_base_shaded)';
-      injectedStyle.insertRule(`#dialog { backdrop-filter: blur(var(--menu-blur-radius)); }`);
+        mainElement.style.backgroundColor = 'var(--new-cros-sys-app_base_shaded)';
+        injectedStyle.insertRule(`#dialog { backdrop-filter: blur(var(--menu-blur-radius)); }`);
 
-      crDrawer.adoptedStyleSheets.push(injectedStyle);
-      break;
+        crDrawer.adoptedStyleSheets.push(injectedStyle);
+        break;
+      } else {
+        return;
+      }
     default:
       if (localStorage.chromeUI) {
         const drawer_inject_blur = e => {
@@ -107,10 +125,10 @@ window.addEventListener('load', async () => {
   }
 
   appendCSS(`
-    --blur-radius:      ${localStorage.blurRadius || 5}px;
+    --blur-radius:      ${blurRadius || 5}px;
     --menu-blur-radius: ${localStorage.menuBlurRadius || 5}px;
-    --element-opacity:  ${localStorage.UIOpacity || 50}%;
     --menu-opacity:     ${localStorage.menuOpacity || 50}%;
+    --element-opacity:  ${UIOpacity || 50}%;
   `, true);
 
   colorVars.forEach(varName => appendCSS(`--${varName}: var(--new-${varName});`));
@@ -119,23 +137,23 @@ window.addEventListener('load', async () => {
 
   printLog('Style injected!');
 
-  if (localStorage.backgroundType.startsWith('video/')) {
+  if (backgroundType.startsWith('video/')) {
     backgroundVideo.autoplay = backgroundVideo.loop = backgroundVideo.muted = true;
 
-    backgroundVideo.src           = localStorage.backgroundURL;
+    backgroundVideo.src           = backgroundURL;
     backgroundVideo.className     = "customBackground";
     backgroundVideo.style.display = 'initial';
 
     bodyElement.appendChild(backgroundVideo);
   } else {
-    backgroundImg.src             = localStorage.backgroundURL;
+    backgroundImg.src             = backgroundURL;
     backgroundImg.className       = "customBackground";
     backgroundVideo.style.display = 'initial';
 
     bodyElement.appendChild(backgroundImg);
   }
 
-  if (localStorage.movingBackground) {
+  if (backgroundType.startsWith('image/') && localStorage.movingBackground) {
     backgroundImg.style.transform = backgroundVideo.style.transform = 'scale(103%)';
 
     document.body.addEventListener('mousemove', e => {

@@ -1,22 +1,28 @@
-const chromeURLs            = chrome.runtime.getManifest().optional_host_permissions,
-      chromeVersion         = parseInt(navigator.userAgent.match(/Chrome\/([0-9]+)/)[1]),
-      rootStyle             = document.documentElement.style,
-      currentVideo          = document.getElementById('currentVideo'),
-      currentImg            = document.getElementById('currentImg'),
-      blurRadiusSlider      = document.getElementById('blurRadiusSlider'),
-      blurRadiusPercent     = document.getElementById('blurRadiusPercent'),
-      menuBlurRadiusSlider  = document.getElementById('menuBlurRadiusSlider'),
-      menuBlurRadiusPercent = document.getElementById('menuBlurRadiusPercent'),
-      UIOpacitySlider       = document.getElementById('UIOpacitySlider'),
-      UIOpacityPercent      = document.getElementById('UIOpacityPercent'),
-      menuOpacitySlider     = document.getElementById('menuOpacitySlider'),
-      menuOpacityPercent    = document.getElementById('menuOpacityPercent'),
-      chromeUISection       = document.getElementById('chromeUISection'),
-      chromeUIinfo          = document.getElementById('chromeUIinfo'),
-      chromeUI              = document.getElementById('chromeUI'),
-      movingBackground      = document.getElementById('movingBackground'),
-      backgroundPicker      = document.getElementById('backgroundPicker'),
-      saveBtn               = document.getElementById('saveBtn');
+const chromeURLs                = chrome.runtime.getManifest().optional_host_permissions,
+      rootStyle                 = document.documentElement.style,
+      currentVideo              = document.getElementById('currentVideo'),
+      currentImg                = document.getElementById('currentImg'),
+      blurRadiusSlider          = document.getElementById('blurRadiusSlider'),
+      blurRadiusPercent         = document.getElementById('blurRadiusPercent'),
+      chromeUIBlurRadiusSlider  = document.getElementById('chromeUIBlurRadiusSlider'),
+      chromeUIBlurRadiusPercent = document.getElementById('chromeUIBlurRadiusPercent'),
+      menuBlurRadiusSlider      = document.getElementById('menuBlurRadiusSlider'),
+      menuBlurRadiusPercent     = document.getElementById('menuBlurRadiusPercent'),
+      UIOpacitySlider           = document.getElementById('UIOpacitySlider'),
+      UIOpacityPercent          = document.getElementById('UIOpacityPercent'),
+      chromeUIOpacitySlider     = document.getElementById('chromeUIOpacitySlider'),
+      chromeUIOpacityPercent    = document.getElementById('chromeUIOpacityPercent'),
+      menuOpacitySlider         = document.getElementById('menuOpacitySlider'),
+      menuOpacityPercent        = document.getElementById('menuOpacityPercent'),
+      chromeUISection           = document.getElementById('chromeUISection'),
+      chromeUIinfo              = document.getElementById('chromeUIinfo'),
+      chromeUI                  = document.getElementById('chromeUI'),
+      chromeUIBgName            = document.getElementById('chromeUIBgName'),
+      backgroundName            = document.getElementById('backgroundName'),
+      movingBackground          = document.getElementById('movingBackground'),
+      backgroundPicker          = document.getElementById('backgroundPicker'),
+      chromeUIBgPicker          = document.getElementById('chromeUIBgPicker'),
+      saveBtn                   = document.getElementById('saveBtn');
 
 function printLog(message) {
   // printLog(): print to browser console
@@ -54,14 +60,14 @@ async function img2webp(imgBlob) {
   return result;
 }
 
-chromeUIinfo.onclick = () => {
-  alert('Not supported for videos on Chrome v124+ due to tightened Content Security Policy (CSP) on built-in pages');
-}
-
 // set labels according to sliders
 blurRadiusSlider.oninput = blurRadiusSlider.onchange = () => {
   rootStyle.setProperty('--blur-radius', `${blurRadiusSlider.value}px`);
   blurRadiusPercent.innerText = `${blurRadiusSlider.value}px`;
+};
+
+chromeUIBlurRadiusSlider.oninput = chromeUIBlurRadiusSlider.onchange = () => {
+  chromeUIBlurRadiusPercent.innerText = `${chromeUIBlurRadiusSlider.value}px`;
 };
 
 menuBlurRadiusSlider.oninput = menuBlurRadiusSlider.onchange = () => {
@@ -74,39 +80,35 @@ UIOpacitySlider.oninput = UIOpacitySlider.onchange = () => {
   UIOpacityPercent.innerText = `${UIOpacitySlider.value}%`;
 };
 
+chromeUIOpacitySlider.oninput = chromeUIOpacitySlider.onchange = () => {
+  chromeUIOpacityPercent.innerText = `${chromeUIOpacitySlider.value}%`;
+};
+
 menuOpacitySlider.oninput = menuOpacitySlider.onchange = () => {
   rootStyle.setProperty('--menu-opacity', `${menuOpacitySlider.value}%`);
   menuOpacityPercent.innerText = `${menuOpacitySlider.value}%`;
 };
 
-// background picker
+// background picker (Files app)
 backgroundPicker.onchange = async () => {
-  const backgroundFile = backgroundPicker.files[0];
+  const backgroundFile     = backgroundPicker.files[0];
+  backgroundName.innerText = backgroundFile.name;
 
   if (backgroundFile.type.startsWith('video/')) {
-    if (chromeVersion >= 124) {
-      chromeUI.checked      = false;
-      chromeUI.disabled     = true;
-      chromeUISection.title = 'Not supported for videos on Chrome v124+ due to tightened Content Security Policy (CSP) on built-in pages';
-      chromeUISection.classList.add('disabled');
-      chromeUISection.querySelector('.switch > .slider').classList.add('disabled');
-    }
-
     currentVideo.src           = URL.createObjectURL(backgroundFile);
     currentVideo.style.display = 'initial';
     currentImg.style.display   = 'none';
   } else {
-    if (chromeVersion >= 124) {
-      chromeUI.disabled     = false;
-      chromeUISection.title = '';
-      chromeUISection.classList.remove('disabled');
-      chromeUISection.querySelector('.switch > .slider').classList.remove('disabled');
-    }
-
     currentImg.src             = URL.createObjectURL(backgroundFile);
     currentImg.style.display   = 'initial';
     currentVideo.style.display = 'none';
   }
+};
+
+// background picker (Chrome UI)
+chromeUIBgPicker.onchange = async () => {
+  const chromeUIBgFile     = chromeUIBgPicker.files[0];
+  chromeUIBgName.innerText = chromeUIBgFile.name;
 };
 
 // save changes
@@ -114,7 +116,8 @@ saveBtn.onclick = async () => {
   saveBtn.disabled = true;
 
   const registration   = await chrome.scripting.getRegisteredContentScripts({ids: ["injection-script"]}).then(s => s[0]),
-        backgroundFile = backgroundPicker.files[0];
+        backgroundFile = backgroundPicker.files[0],
+        chromeUIBgFile = chromeUIBgPicker.files[0];
 
   await chrome.permissions.request({ origins: chromeURLs }).then(() => {
     printLog('Permission acquired!');
@@ -146,6 +149,7 @@ saveBtn.onclick = async () => {
     });
   }
 
+  // save background (Files)
   if (backgroundFile) {
     let dataURL;
 
@@ -159,18 +163,40 @@ saveBtn.onclick = async () => {
     }
 
     await chrome.storage.local.set({
+      backgroundName: backgroundFile.name,
       backgroundURL:  dataURL,
       backgroundType: backgroundFile.type
-    }).then(() => printLog('Background saved.'));
+    }).then(() => printLog('Background for Files app saved.'));
+  }
+
+  // save background (Chrome UI)
+  if (chromeUIBgFile) {
+    let dataURL;
+
+    if (chromeUIBgFile.type.startsWith('image/')) {
+      // convert image to webp to reduce file size
+      printLog('Converting image to WebP...');
+      const webpImg = await img2webp(chromeUIBgFile);
+      dataURL       = await getDataURL(webpImg);
+    } else {
+      dataURL = await getDataURL(chromeUIBgFile);
+    }
+
+    await chrome.storage.local.set({
+      chromeUIBgName: chromeUIBgFile.name,
+      chromeUIBgURL:  dataURL
+    }).then(() => printLog('Background for Chrome UI saved.'));
   }
 
   await chrome.storage.local.set({
-    blurRadius:       blurRadiusSlider.value,
-    menuBlurRadius:   menuBlurRadiusSlider.value,
-    UIOpacity:        UIOpacitySlider.value,
-    menuOpacity:      menuOpacitySlider.value,
-    chromeUI:         chromeUI.checked,
-    movingBackground: movingBackground.checked
+    blurRadius:         blurRadiusSlider.value,
+    chromeUIBlurRadius: chromeUIBlurRadiusSlider.value,
+    menuBlurRadius:     menuBlurRadiusSlider.value,
+    UIOpacity:          UIOpacitySlider.value,
+    chromeUIOpacity:    chromeUIOpacitySlider.value,
+    menuOpacity:        menuOpacitySlider.value,
+    chromeUI:           chromeUI.checked,
+    movingBackground:   movingBackground.checked
   }).then(() => {
     saveBtn.disabled = false;
     printLog('Options saved.');
@@ -180,13 +206,17 @@ saveBtn.onclick = async () => {
 
 window.onload = async () => {
   const localStorage = await chrome.storage.local.get([
+    'backgroundName',
     'backgroundURL',
     'backgroundType',
     'blurRadius',
+    'chromeUIBlurRadius',
     'menuBlurRadius',
     'UIOpacity',
+    'chromeUIOpacity',
     'menuOpacity',
     'chromeUI',
+    'chromeUIBgName',
     'movingBackground'
   ]);
 
@@ -197,14 +227,6 @@ window.onload = async () => {
 
   if (localStorage.backgroundURL) {
     if (localStorage.backgroundType.startsWith('video/')) {
-      if (chromeVersion >= 124) {
-        chromeUI.checked      = false;
-        chromeUI.disabled     = true;
-        chromeUISection.title = 'Not supported for videos on Chrome v124+ due to tightened Content Security Policy (CSP) on built-in pages';
-        chromeUISection.classList.add('disabled');
-        chromeUISection.querySelector('.switch > .slider').classList.add('disabled');
-      }
-
       currentVideo.style.display = 'initial';
       currentVideo.src           = localStorage.backgroundURL;
     } else {
@@ -213,14 +235,20 @@ window.onload = async () => {
     }
   }
 
-  chromeUI.checked                = localStorage.chromeUI;
-  movingBackground.checked        = (localStorage.movingBackground === undefined) ? true : localStorage.movingBackground;
-  blurRadiusSlider.value          = localStorage.blurRadius || 0;
-  blurRadiusPercent.innerText     = `${blurRadiusSlider.value}px`;
-  menuBlurRadiusSlider.value      = localStorage.menuBlurRadius || 5;
-  menuBlurRadiusPercent.innerText = `${menuBlurRadiusSlider.value}px`;
-  UIOpacitySlider.value           = localStorage.UIOpacity || 50;
-  UIOpacityPercent.innerText      = `${UIOpacitySlider.value}%`
-  menuOpacitySlider.value         = localStorage.menuOpacity || 50;
-  menuOpacityPercent.innerText    = `${menuOpacitySlider.value}%`;
+  chromeUI.checked                    = localStorage.chromeUI;
+  movingBackground.checked            = (localStorage.movingBackground === undefined) ? true : localStorage.movingBackground;
+  blurRadiusSlider.value              = localStorage.blurRadius || 0;
+  blurRadiusPercent.innerText         = `${blurRadiusSlider.value}px`;
+  chromeUIBlurRadiusSlider.value      = localStorage.chromeUIBlurRadius || 0;
+  chromeUIBlurRadiusPercent.innerText = `${chromeUIBlurRadiusSlider.value}px`;
+  menuBlurRadiusSlider.value          = localStorage.menuBlurRadius || 5;
+  menuBlurRadiusPercent.innerText     = `${menuBlurRadiusSlider.value}px`;
+  UIOpacitySlider.value               = localStorage.UIOpacity || 50;
+  UIOpacityPercent.innerText          = `${UIOpacitySlider.value}%`
+  chromeUIOpacitySlider.value         = localStorage.chromeUIOpacity || 50;
+  chromeUIOpacityPercent.innerText    = `${chromeUIOpacitySlider.value}%`
+  menuOpacitySlider.value             = localStorage.menuOpacity || 50;
+  menuOpacityPercent.innerText        = `${menuOpacitySlider.value}%`;
+  backgroundName.innerText            = localStorage.backgroundName || 'None';
+  chromeUIBgName.innerText            = localStorage.chromeUIBgName || 'None';
 };

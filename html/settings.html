@@ -29,55 +29,93 @@
           <p>My Files</p>
           <p style="position: absolute; top: -6px; right: 25px;">⋮</p>
           <div id="previewMenu">
-            <p>I am menu</p>
+            <p>Menu item 1</p>
+            <hr />
+            <p>Menu item 2</p>
+            <p>Menu item 3</p>
           </div>
         </div>
       </div>
     </div>
   </fieldset>
   <fieldset>
-    <legend>Pick a new background (video supported)</legend>
-    <input id="backgroundPicker" type="file" accept="image/*,video/*" />
+    <legend>Custom background for Files app (video supported)</legend>
+    <div class="backgroundIndicator">
+      <input id="backgroundPicker" type="file" accept="image/*,video/*" />
+      <div>
+        <p>Current background: </p>
+        <p id="backgroundName"></p>
+      </div>
+    </div>
   </fieldset>
   <fieldset>
-    <legend>Options</legend>
+    <legend>Custom background for Chrome UI</legend>
     <div id="chromeUISection" class="horizontal-center">
       <label class="switch">
         <input type="checkbox" id="chromeUI">
         <span class="slider round"></span>
       </label>
       <label for="chromeUI">Enable on Chrome UI (e.g. bookmark page)</label>
-      <label id="chromeUIinfo">🛈</label>
     </div>
-
+    <hr />
+    <div class="backgroundIndicator">
+      <input id="chromeUIBgPicker" type="file" accept="image/*,video/*" />
+      <div>
+        <p>Current background:</p>
+        <p id="chromeUIBgName"></p>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Options</legend>
     <div class="horizontal-center">
       <label class="switch">
         <input type="checkbox" id="movingBackground">
         <span class="slider round"></span>
       </label>
-      <label for="movingBackground">Update background position based on cursor position</label>
+      <label for="movingBackground">Update background position based on cursor position (for images only)</label>
     </div>
-
+    <hr />
     <table>
       <tr>
-        <td class="description">UI blur radius: </td>
+        <td class="description">UI blur radius (Chrome UI): </td>
         <td class="slider-td">
-          <input style="width: calc(100% - 30px);" id="blurRadiusSlider" type="range" min="0" max="20" value="5">
+          <input id="chromeUIBlurRadiusSlider" type="range" min="0" max="100" value="50">
+          <label id="chromeUIBlurRadiusPercent" for="chromeUIBlurRadiusSlider"></label>
+        </td>
+      </tr>
+      <tr>
+        <td class="description">UI opacity (Chrome UI): </td>
+        <td class="slider-td">
+          <input id="chromeUIOpacitySlider" type="range" min="0" max="100" value="50">
+          <label id="chromeUIOpacityPercent" for="chromeUIOpacitySlider"></label>
+        </td>
+      </tr>
+    </table>
+    <hr />
+    <table>
+      <tr>
+        <td class="description">UI blur radius (Files app): </td>
+        <td class="slider-td">
+          <input id="blurRadiusSlider" type="range" min="0" max="20" value="5">
           <label id="blurRadiusPercent" for="blurRadiusSlider"></label>
         </td>
       </tr>
+      <tr>
+        <td class="description">UI opacity (Files app): </td>
+        <td class="slider-td">
+          <input id="UIOpacitySlider" type="range" min="0" max="100" value="50">
+          <label id="UIOpacityPercent" for="UIOpacitySlider"></label>
+        </td>
+      </tr>
+    </table>
+    <hr />
+    <table>
       <tr>
         <td class="description">Menu blur radius: </td>
         <td class="slider-td">
           <input id="menuBlurRadiusSlider" type="range" min="0" max="20" value="5">
           <label id="menuBlurRadiusPercent" for="menuBlurRadiusSlider"></label>
-        </td>
-      </tr>
-      <tr>
-        <td class="description">UI opacity: </td>
-        <td class="slider-td">
-          <input id="UIOpacitySlider" type="range" min="0" max="100" value="50">
-          <label id="UIOpacityPercent" for="UIOpacitySlider"></label>
         </td>
       </tr>
       <tr>
