@@ -22,6 +22,7 @@ const chromeURLs                = chrome.runtime.getManifest().optional_host_per
       movingBackground          = document.getElementById('movingBackground'),
       backgroundPicker          = document.getElementById('backgroundPicker'),
       chromeUIBgPicker          = document.getElementById('chromeUIBgPicker'),
+      resetBtn                  = document.getElementById('resetBtn'),
       saveBtn                   = document.getElementById('saveBtn');
 
 function printLog(message) {
@@ -110,6 +111,24 @@ chromeUIBgPicker.onchange = async () => {
   const chromeUIBgFile     = chromeUIBgPicker.files[0];
   chromeUIBgName.innerText = chromeUIBgFile.name;
 };
+
+// reset options
+resetBtn.onclick = () => {
+  chromeUI.checked                    = false;
+  movingBackground.checked            = true;
+  blurRadiusSlider.value              = 0;
+  blurRadiusPercent.innerText         = `${blurRadiusSlider.value}px`;
+  chromeUIBlurRadiusSlider.value      = 0;
+  chromeUIBlurRadiusPercent.innerText = `${chromeUIBlurRadiusSlider.value}px`;
+  menuBlurRadiusSlider.value          = 5;
+  menuBlurRadiusPercent.innerText     = `${menuBlurRadiusSlider.value}px`;
+  UIOpacitySlider.value               = 50;
+  UIOpacityPercent.innerText          = `${UIOpacitySlider.value}%`
+  chromeUIOpacitySlider.value         = 50;
+  chromeUIOpacityPercent.innerText    = `${chromeUIOpacitySlider.value}%`
+  menuOpacitySlider.value             = 50;
+  menuOpacityPercent.innerText        = `${menuOpacitySlider.value}%`;
+}
 
 // save changes
 saveBtn.onclick = async () => {

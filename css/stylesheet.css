@@ -176,3 +176,7 @@ input[type="file"] { width: 100px; }
   font-size: 0.9rem;
   margin-right: 10px;
 }
+
+#bottomBtnList > button {
+  width: 150px;
+}
